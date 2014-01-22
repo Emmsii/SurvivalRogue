@@ -62,7 +62,7 @@ public class Noise {
 		
 		//System.out.println("X: " + x + ", Y: " + y + seed);
 		
-		System.out.println("Generating noise: " + w + "x" + h + ", @ x: " + xa + ", y: " + ya);
+		//System.out.println("Generating noise: " + w + "x" + h + ", @ x: " + xa + ", y: " + ya);
 		
 		int result[][] = new int[16][16];
 		

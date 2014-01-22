@@ -48,6 +48,7 @@ public class InputHandler implements KeyListener{
 	public Key esc = new Key();
 	
 	public Key debug = new Key();
+	public Key reload = new Key();
 	
 	public void release(){
 		for(int i = 0; i < keys.size(); i++){
@@ -77,5 +78,6 @@ public class InputHandler implements KeyListener{
 		if(keyCode == KeyEvent.VK_ESCAPE) esc.toggle(isPressed);
 		
 		if(keyCode == KeyEvent.VK_F3) debug.toggle(isPressed);
+		if(keyCode == KeyEvent.VK_F5) reload.toggle(isPressed);
 	}
 }

@@ -77,12 +77,9 @@ public class FileHandler {
 	public void saveChunk(Chunk chunk, String name){
 		int x = chunk.getX();
 		int y = chunk.getY();
+
+		file = new File(location + "/worlds/" + name + "/data/c_" + x + "_" + y + ".cnk");
 		
-		int xa = x / 16;
-		int ya = y / 16;
-
-		file = new File(location + "/worlds/" + name + "/data/c_" + xa + "_" + ya + ".cnk");
-
 		try {
 			FileOutputStream out = new FileOutputStream(file);
 			if(!file.exists()) file.createNewFile();
@@ -112,10 +109,8 @@ public class FileHandler {
 			ois.close();
 			in.close();
 		}catch(IOException e){
-			System.err.println("Error: Could not load chunk file.");
+			System.err.println("Error: Could not load chunk file - " + x + "_" + y);
 			e.printStackTrace();
-			System.exit(1);
-			
 		}catch(ClassNotFoundException e){
 			e.printStackTrace();
 		}

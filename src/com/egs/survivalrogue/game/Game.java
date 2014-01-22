@@ -19,7 +19,7 @@ public class Game {
 	
 	private Random random = new Random();
 	
-	private boolean debug = false;
+	private boolean debug = true;
 	private boolean running = false;
 		
 	public Game(InputHandler input, MainComponent main, FileHandler file){
@@ -59,14 +59,15 @@ public class Game {
 	}
 	
 	public void drawInterface(Graphics g){
-		drawText("IN GAME, NO ESC", 100, 100, 12, true, g);
-		
+		drawText("GAME INTERFACE HERE", 545, 25, 12, true, g);
+				
 		//Must be last
 		if(debug) drawDebug(g);
 	}
 	
 	public void drawDebug(Graphics g){
-		drawText("DEBUG MODE!", 50, 50, 12, true, g);
+		drawText("DEBUG MODE! Via game class", 50, 50, 12, true, g);
+		drawText(main.getVersion(), 2, 10, 9, false, g);
 	}
 	
 	public void drawText(String msg, int x, int y, int size, boolean bold, Graphics g){

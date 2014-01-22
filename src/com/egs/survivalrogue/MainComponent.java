@@ -39,6 +39,7 @@ public class MainComponent extends Canvas implements Runnable{
 		file = new FileHandler();
 		game = new Game(input, this, file);
 		menu = new Menu(input, game, this, file);
+
 	}
 	
 	public static void main(String[] args){
@@ -120,10 +121,6 @@ public class MainComponent extends Canvas implements Runnable{
 		if(state == 0) menu.render(g);
 		if(state == 1) game.render(g);
 		
-		g.setFont(new Font("Arial", Font.PLAIN, 9));
-		g.setColor(Color.WHITE);
-		g.drawString(VERSION, 2, 10);
-		
 		g.dispose();
 		bs.show();
 	}
@@ -144,6 +141,10 @@ public class MainComponent extends Canvas implements Runnable{
 
 	public void setState(int state) {
 		this.state = state;
+	}
+	
+	public String getVersion(){
+		return VERSION;
 	}
 	
 }

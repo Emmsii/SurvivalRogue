@@ -12,8 +12,10 @@ public class Chunk implements Serializable{
 	protected int[][] height;
 	protected int[][] tileId;
 
-	public Chunk(String id){
+	public Chunk(String id, int x, int y){
 		this.id = id;
+		this.x = x;
+		this.y = y;
 		height = new int[16][16];
 		tileId = new int[16][16];
 	}
@@ -69,4 +71,5 @@ public class Chunk implements Serializable{
 	public int getTileId(int x, int y){
 		return this.tileId[x][y];
 	}
+
 }

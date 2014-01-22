@@ -72,7 +72,7 @@ public class WorldGen implements Runnable{
 	public void createChunk(int x, int y, int itteration){	
 		//System.out.println(x + ", " + y + ", " + itteration);
 		
-		chunk = new Chunk("#");
+		chunk = new Chunk("#", 0, 0);
 //		chunk.setHeight(noise.startNoise(w, h, x * itteration - 15, y * itteration - 15, seed, 0.008, 0.4, 8, 16));
 		chunk.setX(x * itteration - 15);
 		chunk.setY(y * itteration - 15);
@@ -82,7 +82,7 @@ public class WorldGen implements Runnable{
 	
 	public void createChunk(int x, int y){
 		System.out.println("Creating Chunk @ " + x + ", " + y);
-		chunk = new Chunk("#");
+		chunk = new Chunk("#", 0, 0);
 		chunk.setX(x);
 		chunk.setY(y);
 		
