@@ -100,18 +100,18 @@ public class Level {
 	}
 	
 	public void createSpawnChunks(){
-//		createChunk(0, 0);
-//		createChunk(1, 0);
-//		createChunk(1, 1);
-//		createChunk(0, 1);
+		createChunk(0, 0);
+		createChunk(1, 0);
+		createChunk(1, 1);
+		createChunk(0, 1);
 	}
 	
 	private void loadSpawnChunks(){
 		double start = System.currentTimeMillis();
-//		chunks.add(file.loadChunk(0, 0, name));
-//		chunks.add(file.loadChunk(1, 0, name));
-//		chunks.add(file.loadChunk(1, 1, name));
-//		chunks.add(file.loadChunk(0, 1, name));
+		chunks.add(file.loadChunk(0, 0, name));
+		chunks.add(file.loadChunk(1, 0, name));
+		chunks.add(file.loadChunk(1, 1, name));
+		chunks.add(file.loadChunk(0, 1, name));
 		
 		double end = System.currentTimeMillis();
 		System.out.println("Spawn chunks loaded in: " + (end - start) + "ms");
