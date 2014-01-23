@@ -2,7 +2,7 @@ package com.egs.survivalrogue.util;
 
 
 public class Noise {
-
+	
 	public Noise(){
 		
 	}
@@ -83,10 +83,10 @@ public class Noise {
 				result[x][y] = (int) c;
 			}
 		}
-		
 		return result;
 			
 	}
+
 		
 //	private double normalize(double a, double max){
 //		return Math.abs(a / max);

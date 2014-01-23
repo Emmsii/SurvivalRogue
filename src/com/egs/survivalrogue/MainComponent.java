@@ -28,7 +28,7 @@ public class MainComponent extends Canvas implements Runnable{
 	private static final String VERSION = "v0.1a"  ;
 	private static final String NAME = "Survival Rogue " + VERSION;
 	private boolean running = false;
-	
+
 	private int fps;
 	private int ups;
 	
@@ -146,5 +146,5 @@ public class MainComponent extends Canvas implements Runnable{
 	public String getVersion(){
 		return VERSION;
 	}
-	
+
 }
