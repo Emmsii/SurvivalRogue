@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.egs.survivalrogue.MainComponent;
 import com.egs.survivalrogue.game.world.Chunk;
 import com.egs.survivalrogue.util.FileHandler;
 import com.egs.survivalrogue.util.InputHandler;
@@ -117,14 +116,21 @@ public class Level {
 		if(input.reload.isPressed()) reloadAllChunks();
 	}
 
-	public void renderTile(int id, Color color, int x, int y, Graphics g){
-		g.setColor(color);
-		g.setFont(new Font("Arial", Font.BOLD, 12));
-
-		if(id == 0) g.drawString("X", x, y);
-		else if(id == 1) g.drawString("W", x, y);
-		else if(id == 2) g.drawString("0", x, y);
-		else if(id == 3) g.drawString("8", x, y);
+	public void renderTile(String icon, Color first, Color second, int x, int y, Graphics g){
+//		g.setColor(color);
+//		g.setFont(new Font("Arial", Font.BOLD, 12));
+//
+//		if(id == 0) g.drawString("X", x, y);
+//		else if(id == 1) g.drawString("W", x, y);
+//		else if(id == 2) g.drawString("0", x, y);
+//		else if(id == 3) g.drawString("8", x, y);
+		g.setColor(first);
+		g.fillRect(x - 1, y - 11, 13, 13);
+		
+		g.setColor(second);
+		g.setFont(new Font("Arial", Font.BOLD, 10));
+		g.drawString(icon, x, y);
+	
 	}
 
 	public void renderDebug(Graphics g){
@@ -151,7 +157,7 @@ public class Level {
 		for(Chunk chunk : chunks){
 			for(int y = 0; y < 16; y++){
 				for(int x = 0; x < 16; x++){
-					int xa = ((x + (chunk.getX() * 16) - xPos) * 12) + 1;
+					int xa = ((x + (chunk.getX() * 16) - xPos) * 12);
 				    int ya = ((y + (chunk.getY() * 16) - yPos) * 12) + 10;
 				    
 				    if(x + (chunk.getX() * 16) - xPos > 43) continue;
@@ -159,11 +165,18 @@ public class Level {
 				    if(y + (chunk.getY() * 16) - yPos > 33) continue;
 				    if(y + (chunk.getY() * 16) - yPos < 0) continue;
 				          
-				    if(chunk.getTileId(x, y) == 1) renderTile(1, Color.BLUE, xa, ya, g);
-				    else if(chunk.getTileId(x, y) == 2) renderTile(2, Color.GREEN, xa, ya, g);
-				    else if(chunk.getTileId(x, y) == 3) renderTile(3, Color.RED, xa, ya, g);
-				    else renderTile(0, Color.CYAN, xa, ya, g);
+				    if(chunk.getTileId(x, y) == 1) renderTile("W", new Color(87, 165, 217), new Color(45, 119, 168), xa, ya, g);
+				    else if(chunk.getTileId(x, y) == 2) renderTile(". .", new Color(125, 194, 52), new Color(85, 145, 20), xa + 1, ya - 1, g);
+				    else if(chunk.getTileId(x, y) == 3) renderTile("M", new Color(115, 115, 115), new Color(77, 77, 77), xa, ya, g);
+				    else if(chunk.getTileId(x, y) == 4) renderTile("S", new Color(237, 225, 173), new Color(207, 194, 136), xa, ya, g);
+				    else renderTile("X", new Color(0, 0, 0), new Color(255, 0, 0), xa, ya, g);
 				}
+			}
+			if(debug){
+				drawText("id:" + chunk.getId(), ((chunk.getX() * 16) - xPos) * 12, ((chunk.getY() * 16) - yPos) * 12 + 24, 12, true, g);
+				g.setColor(Color.WHITE);
+				g.drawRect(((chunk.getX() * 16) - xPos) * 12, ((chunk.getY() * 16) - yPos) * 12, 16 * 12, 16 * 12);	
+				//System.out.println("rendering chunk: " + chunk.getId());
 			}
 		}
 	}
@@ -208,17 +221,26 @@ public class Level {
 		double start = System.nanoTime();
 		chunk = new Chunk(id, x / 16, y / 16);
 
-		// int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
-		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.5, 0.4, 8, 16);
+		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
+		//int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.5, 0.4, 8, 16);
 
 		chunk.setHeight(noisemap);
 
+		/*
+		 * 0: Invalid
+		 * 1: Water
+		 * 2: Grass
+		 * 3: Moutain
+		 * 4: Sand
+		 */
+		
 		for(int ya = 0; ya < 16; ya++){
 			for(int xa = 0; xa < 16; xa++){
 				if(noisemap[xa][ya] < 64) chunk.setTileId(xa, ya, 1);
-				else if(noisemap[xa][ya] >= 64) chunk.setTileId(xa, ya, 2);
-				else if(noisemap[xa][ya] >= 128) chunk.setTileId(xa, ya, 3);
-				else chunk.setTileId(xa, ya, 0);
+				if(noisemap[xa][ya] >= 64 && noisemap[xa][ya] < 72) chunk.setTileId(xa, ya, 4);
+				if(noisemap[xa][ya] >= 72) chunk.setTileId(xa, ya, 2);
+				if(noisemap[xa][ya] >= 250) chunk.setTileId(xa, ya, 3);
+				//else chunk.setTileId(xa, ya, 0);
 			}
 		}
 		double start2 = System.nanoTime();

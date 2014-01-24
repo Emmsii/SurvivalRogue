@@ -48,6 +48,9 @@ public class LoadGameMenu {
 		if(canSelect){
 			if(input.esc.isPressed()){
 				menu.setState(0);
+				selection = 0;
+				canSelect = false;
+				return;
 			}
 			
 			if(input.up.isPressed()){
@@ -76,8 +79,6 @@ public class LoadGameMenu {
 	}
 
 	public void drawList(Graphics g){
-
-		
 		for(int i = 0; i < worlds.length; i++){
 			String[] parts = worlds[i].split("_");
 					
@@ -86,13 +87,12 @@ public class LoadGameMenu {
 		}
 		
 		
-		
-//		for(int i = 0; i < console.size(); i++){
-//			String msg = console.get(i);
-//			
-//			if(console.size() <= 16) g.drawString("> " + msg, 513, 215 + (i * 12));
-//			else if(i >= console.size() - 16)g.drawString("> " + msg, 513, 215 + ((i - (console.size() - 16)) * 12));
-//		}
+		for(int i = 0; i < worlds.length; i++){
+			String[] parts = worlds[i].split("_");
+					
+			drawText(parts[0], 75, 75 + (12 * i), 12, true, g);
+				if(selection == i) drawText(">", 65, 75 + (12 * i), 12, true, g);
+		}
 	}
 	
 	public void drawInfo(Graphics g){
