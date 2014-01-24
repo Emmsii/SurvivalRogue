@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -32,18 +31,62 @@ public class FileHandler {
 		if(!file.exists()) file.mkdirs();
 	}
 	
-	public void newWorldData(String name, long seed){
+	public void newWorldData(String name, long seed, int x, int y){
 		file = new File(location + "/worlds/" + name + "/level.dat");
 		if(!file.exists())
 			try {
 				PrintWriter write = new PrintWriter(file);
 				file.createNewFile();
-				write.println(name);
-				write.println(seed);
+				write.println("name: " + name);
+				write.println("seed: " + seed);
+				write.println("x: " + x);
+				write.println("y: " + y);
 				write.close();
-			} catch (IOException e) {
+			} catch (IOException e){
+				System.err.println("Error: Could not make level data file.");
 				e.printStackTrace();
 			}
+	}
+	
+	public void updateWorldData(String name, long seed, int x, int y){
+		file = new File(location + "/worlds/" + name + "/level.dat");
+		if(file.exists()){
+			try{
+				FileInputStream in = new FileInputStream(file);
+				BufferedReader reader = new BufferedReader(new FileReader(file));
+				if(reader.readLine().startsWith("name: " + name)){
+					PrintWriter write = new PrintWriter(file);
+					write.println("name: " + name);
+					write.println("seed: " + seed);
+					write.println("x: " + x);
+					write.println("y: " + y);
+					write.close();
+				}else System.err.println("Error: level.dat file id invalid for world: " + name);
+				in.close();
+				reader.close();
+			}catch(IOException e){
+				System.err.println("Could not save level.dat file for world: " + name);
+				e.printStackTrace();
+			}
+		}else System.err.println("Error: level.dat file does not exist for world: " + name);
+	}
+	
+	public void newPlayerFile(String worldName, String name, int gender, int race, int pClass){
+		file = new File(location + "/worlds/" + worldName + "/player.dat");
+		if(!file.exists()){
+			try{
+				PrintWriter write = new PrintWriter(file);
+				file.createNewFile();
+				write.println("name: " + name);
+				write.println("gender: " + gender);
+				write.println("race: " + race);
+				write.println("class: " + pClass);
+				write.close();
+			}catch(IOException e){
+				System.err.println("Error: Could not make player data file.");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public String[] loadWorlds(){
@@ -94,7 +137,6 @@ public class FileHandler {
 		} catch (FileNotFoundException e) {
 			System.err.println("Error: Could not save chunk file: " + chunk.getId() + ".");
 			e.printStackTrace();
-			System.exit(16);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +152,7 @@ public class FileHandler {
 			ois.close();
 			in.close();
 		}catch(IOException e){
-			System.err.println("Error: Could not load chunk file - " + x + "_" + y);
+			System.err.println("Error: Could not load chunk file: " + x + "_" + y + ". Chunk is missing or corrupted.");
 			e.printStackTrace();
 		}catch(ClassNotFoundException e){
 			e.printStackTrace();
@@ -140,7 +182,6 @@ public class FileHandler {
 
 	public boolean checkFileFor(int x, int y, String name){
 		file = new File(location + "/worlds/" + name + "/data/c_" + x + "_" + y + ".cnk");
-		
 		if(file.exists()) return true;
 		return false;
 	}

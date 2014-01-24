@@ -3,6 +3,7 @@ package com.egs.survivalrogue.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -18,6 +19,8 @@ public class CreatePlayerMenu {
 	private Game game;
 	private MainComponent main;
 	private FileHandler file;
+	
+	private Random random;
 	
 	private String name = "Unknown";
 	private String[] gender = { "Male", "Female" };
@@ -35,6 +38,7 @@ public class CreatePlayerMenu {
 		this.game = game;
 		this.main = main;
 		this.file = file;
+		random = new Random();
 	}
 	
 	public void render(Graphics g){
@@ -112,8 +116,13 @@ public class CreatePlayerMenu {
 		
 		if(input.select.isPressed()){
 			if(selection == 4){
-				game.init();
+				String[] names = file.loadNames("world_names");
+				String worldName = names[random.nextInt(names.length)];
+				file.newWorldFolder(worldName);
+				file.newPlayerFile(worldName, name, genderSelect, raceSelect, classSelect);
+				game.init(worldName);
 				main.setState(1);
+				menu.setState(0);
 			}
 		}
 		

@@ -3,7 +3,6 @@ package com.egs.survivalrogue;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -129,12 +128,19 @@ public class MainComponent extends Canvas implements Runnable{
 		if(state == 0) menu.update();
 		if(state == 1){
 			game.update();
-			game.init();
+			//game.init();
 		}
 
 		input.release();
 	}
 
+	public void init(){
+		//Reset game menus.
+		setState(0);
+		menu = null;
+		menu = new Menu(input, game, this, file);
+	}
+	
 	public int getState() {
 		return state;
 	}

@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Random;
 
 import com.egs.survivalrogue.MainComponent;
 import com.egs.survivalrogue.game.world.Chunk;
@@ -22,7 +21,6 @@ public class Level {
 	private Chunk chunk;
 	private Noise noise;
 
-	private Random random = new Random();
 
 	private String name;
 	private long seed;
@@ -42,11 +40,11 @@ public class Level {
 	private int yPos = 0;
 
 	private List<Chunk> chunks = new ArrayList<Chunk>();
-	//private int[][] toRender = new int[43][35];
 
-	public Level(long seed, MainComponent main, FileHandler file,InputHandler input){
+	public Level(long seed, String worldName, MainComponent main, FileHandler file,InputHandler input){
 		System.out.println("New Level");
 		this.seed = seed;
+		this.name = worldName;
 		this.main = main;
 		this.file = file;
 		this.input = input;
@@ -55,32 +53,17 @@ public class Level {
 	}
 
 	public void init(){
-		String[] names = file.loadNames("world_names"); // Load a list of names
-														// from the res folder.
-		name = names[random.nextInt(names.length)]; // Assign a random world
-													// name from the list.
-
 		file.newWorldFolder(name); // Save the world folder.
-		file.newWorldData(name, seed); // Create and save the world data .dat
-										// file.
+		file.newWorldData(name, seed, xPos, yPos); // Create and save the world data.dat file.
+
 		loadChunks();
 		moving = false;
 		System.out.println("New world: " + name + " (Seed: " + seed + ")");
 	}
 
 	public void render(Graphics g){
-		/* Render temp game window. */
-//		for(int y = 0; y < 35; y++){
-//			for(int x = 0; x < 43; x++){
-//				int xa = x * 12 + 1;
-//				int ya = y * 12 + 10;
-//				renderTile(0, Color.BLUE, xa, ya, g);
-//			}
-//		}
-
 		renderChunks(g);
 		if (debug) renderDebug(g);
-
 	}
 
 	public void update(){
@@ -231,6 +214,12 @@ public class Level {
 	/*
 	 * Chunks End -------------------------------------------------------------
 	 */
+	
+	public void saveLevel(){
+		System.out.println("Saving level.");
+		file.updateWorldData(name, seed, xPos, yPos);
+		//Update level.dat file with relevant data.
+	}
 
 	private boolean checkListFor(int x, int y){
 		String id = x + "_" + y;
