@@ -22,7 +22,7 @@ public class Game {
 	private boolean debug = true;
 	private boolean running = false;
 	private boolean escMenu = false;
-	private boolean canSave = true;
+	private boolean canSave;
 	private int selection = 0;
 		
 	public Game(InputHandler input, MainComponent main, FileHandler file){
@@ -32,15 +32,23 @@ public class Game {
 		this.file = file;
 	}
 	
-	public void init(String worldName){
+	public void init(String name){
 		if(!running){
-			level = new Level(random.nextLong(), worldName, main, file, input);
+			level = null;
+			level = new Level(random.nextLong(), name, file, input);
 			level.init();
 			running = true;
 		}
 	}
 	
-	public void render(Graphics g){
+	public void loadLevel(String name){
+		if(!running){
+			level = null;
+			level = new Level(name, file, input);
+		}
+	}
+	
+	public void render(Graphics g){				
 		if(running){
 			level.render(g);
 			drawInterface(g);
@@ -84,6 +92,10 @@ public class Game {
 				}
 				if(selection == 1){
 					main.init();
+					running = false;
+					escMenu = false;
+					selection = 0;
+					canSave = true;
 				}
 			}
 		}
@@ -132,4 +144,14 @@ public class Game {
 		g.setColor(Color.WHITE);
 		g.drawString(msg, x, y);
 	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+	
+	
 }

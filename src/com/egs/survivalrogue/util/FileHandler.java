@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -23,6 +25,8 @@ public class FileHandler {
 
 	public FileHandler(){
 		file = new File(location + "/worlds/");
+		if(!file.exists()) file.mkdirs();
+		file = new File("res/");
 		if(!file.exists()) file.mkdirs();
 	}
 	
@@ -118,6 +122,24 @@ public class FileHandler {
 		}
 	}
 	
+	public String[] getPlayerInfo(String name){
+		file = new File(location + "/worlds/" + name + "/player.dat");
+		
+		List<String> lines = new ArrayList<String>();
+		String line = null;
+		try{
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			while((line = reader.readLine()) != null){
+				lines.add(line);
+			}
+			reader.close();
+			return lines.toArray(new String[lines.size()]);
+		}catch(IOException e){
+			String[] err = {"Error: player.dat not found in world folder."};
+			return err;
+		}
+	}
+	
 	public void saveChunk(Chunk chunk, String name){
 		int x = chunk.getX();
 		int y = chunk.getY();
@@ -163,11 +185,13 @@ public class FileHandler {
 	public String[] loadNames(String type){
 		if(type == null) return null;
 		file = new File("res/names/" + type + ".txt");
+		//InputStream is = this.getClass().getResourceAsStream("/res/names/" + type + ".txt");
 
 		List<String> lines = new ArrayList<String>();
 		String line = null;
 		
 		try{
+			//BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			while((line = reader.readLine()) != null){
 				lines.add(line);

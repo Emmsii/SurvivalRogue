@@ -3,6 +3,9 @@ package com.egs.survivalrogue.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -21,6 +24,8 @@ public class CreatePlayerMenu {
 	private FileHandler file;
 	
 	private Random random;
+	private DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+	private Date date = new Date();
 	
 	private String name = "Unknown";
 	private String[] gender = { "Male", "Female" };
@@ -117,7 +122,7 @@ public class CreatePlayerMenu {
 		if(input.select.isPressed()){
 			if(selection == 4){
 				String[] names = file.loadNames("world_names");
-				String worldName = names[random.nextInt(names.length)];
+				String worldName = names[random.nextInt(names.length)] + "_" + dateFormat.format(date);
 				file.newWorldFolder(worldName);
 				file.newPlayerFile(worldName, name, genderSelect, raceSelect, classSelect);
 				game.init(worldName);

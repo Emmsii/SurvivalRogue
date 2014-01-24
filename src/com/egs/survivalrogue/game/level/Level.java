@@ -15,7 +15,6 @@ import com.egs.survivalrogue.util.Noise;
 
 public class Level {
 
-	private MainComponent main;
 	private InputHandler input;
 	private FileHandler file;
 	private Chunk chunk;
@@ -41,34 +40,54 @@ public class Level {
 
 	private List<Chunk> chunks = new ArrayList<Chunk>();
 
-	public Level(long seed, String worldName, MainComponent main, FileHandler file,InputHandler input){
+	public Level(long seed, String worldName, FileHandler file, InputHandler input){
 		System.out.println("New Level");
 		this.seed = seed;
 		this.name = worldName;
-		this.main = main;
 		this.file = file;
 		this.input = input;
 		this.noise = new Noise();
-
+	}
+	
+	public Level(String worldName, FileHandler file, InputHandler input){
+		System.out.println("Load level");
+		this.name = worldName;
+		this.file = file;
+		this.input = input;
+		this.noise = new Noise();
+		loadLevel(worldName);
+	}
+	
+	public void loadLevel(String name){
+		String data[] = file.getWorldData(name);
+		String[] rawString = data[1].split(": ");
+		seed = Long.parseLong(rawString[1]);
+		String[] x = data[2].split(": ");
+		String[] y = data[3].split(": ");
+		xPos = Integer.parseInt(x[1]);
+		yPos = Integer.parseInt(y[1]);		
+		loadChunks();
+		moving = false;
+		System.out.println("Level loaded.");
 	}
 
 	public void init(){
-		file.newWorldFolder(name); // Save the world folder.
-		file.newWorldData(name, seed, xPos, yPos); // Create and save the world data.dat file.
+		file.newWorldFolder(name); //Save the world folder.
+		file.newWorldData(name, seed, xPos, yPos); //Create and save the world data.dat file.
 
-		loadChunks();
+		loadChunks(); //Creates, saves and loads spawn chunks.
 		moving = false;
 		System.out.println("New world: " + name + " (Seed: " + seed + ")");
 	}
 
 	public void render(Graphics g){
-		renderChunks(g);
-		if (debug) renderDebug(g);
+		renderChunks(g); //Renders the chunks loaded.
+		if(debug) renderDebug(g); //Renders the debug information, on by default.
 	}
 
 	public void update(){
-		input();
-		updateChunks();
+		input(); //Updates user input.
+		updateChunks(); //Updates the chunks (loading + unloading).
 	}
 
 	private void input(){
@@ -189,8 +208,7 @@ public class Level {
 		double start = System.nanoTime();
 		chunk = new Chunk(id, x / 16, y / 16);
 
-		// int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4,
-		// 8, 16);
+		// int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
 		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.5, 0.4, 8, 16);
 
 		chunk.setHeight(noisemap);

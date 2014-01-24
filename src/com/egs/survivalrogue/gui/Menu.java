@@ -26,7 +26,7 @@ public class Menu {
 		miscMenu = new MiscMenu(input, this);
 		createWorldMenu = new CreateWorldMenu(main, input, this, file);
 		createPlayerMenu = new CreatePlayerMenu(input, this, game, main, file);
-		loadGameMenu = new LoadGameMenu(input, this, file);
+		loadGameMenu = new LoadGameMenu(main, game, input, this, file);
 	}
 	
 	public void render(Graphics g){
