@@ -71,5 +71,4 @@ public class Chunk implements Serializable{
 	public int getTileId(int x, int y){
 		return this.tileId[x][y];
 	}
-
 }

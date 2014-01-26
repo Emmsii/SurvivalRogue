@@ -23,7 +23,7 @@ public class Level {
 	private String name;
 	private long seed;
 
-	private boolean debug = true;
+	private boolean debug = false;
 	private static final int renderDistance = 3 * 16;
 	private int chunksGenerated = 0;
 	private int chunksLoaded = 0;
@@ -141,6 +141,10 @@ public class Level {
 		drawText("Last Load Time: " + loadTime, 540, 100, 12, true, g);
 		drawText("Last Save Time: " + saveTime, 540, 111, 12, true, g);
 		drawText("Last Gen Time: " + genTime, 540, 122, 12, true, g);
+		
+		for(int i = 0; i < chunks.size(); i++){
+			drawText("id: " + chunks.get(i).getId(), 600, 150 + (i * 12), 12, true, g);
+		}
 	}
 
 	/*
@@ -176,7 +180,6 @@ public class Level {
 				drawText("id:" + chunk.getId(), ((chunk.getX() * 16) - xPos) * 12, ((chunk.getY() * 16) - yPos) * 12 + 24, 12, true, g);
 				g.setColor(Color.WHITE);
 				g.drawRect(((chunk.getX() * 16) - xPos) * 12, ((chunk.getY() * 16) - yPos) * 12, 16 * 12, 16 * 12);	
-				//System.out.println("rendering chunk: " + chunk.getId());
 			}
 		}
 	}
@@ -185,12 +188,15 @@ public class Level {
 		double start = System.nanoTime();
 		for(int y = (yPos - 16); y < (yPos + renderDistance); y++){
 			for(int x = (xPos - 16); x < (xPos + renderDistance); x++){
-				int xa = x / 16;
-				int ya = y / 16;
-				if(!checkListFor(xa, ya)){
-					if (!file.checkFileFor(xa, ya, name)) createChunk(xa + "_" + ya, x, y);
-					chunks.add(file.loadChunk(xa, ya, name));
-					chunksLoaded++;
+				if(x % 16 == 0 && y % 16 == 0){
+					int xa = x / 16;
+					int ya = y / 16;
+					if(!checkListFor(xa, ya)){
+						if(!file.checkFileFor(xa, ya, name)) createChunk(xa + "_" + ya, x, y);
+						System.out.println("X: " + x + ", Y: " + y);
+						chunks.add(file.loadChunk(xa, ya, name));
+						chunksLoaded++;
+					}
 				}
 			}
 		}
@@ -219,6 +225,8 @@ public class Level {
 
 	public void createChunk(String id, int x, int y){
 		double start = System.nanoTime();
+		
+		
 		chunk = new Chunk(id, x / 16, y / 16);
 
 		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
