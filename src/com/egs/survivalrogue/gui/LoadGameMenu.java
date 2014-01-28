@@ -43,8 +43,9 @@ public class LoadGameMenu {
 	}
 	
 	public void update(){
+		double start = System.nanoTime();
 		worlds = file.loadWorlds();
-		
+		System.out.println((System.nanoTime() - start) / 1000000 + "ms");
 		if(canSelect){
 			if(input.esc.isPressed()){
 				menu.setState(0);

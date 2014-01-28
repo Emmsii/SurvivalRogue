@@ -3,6 +3,10 @@ package com.egs.survivalrogue.util;
 
 public class Noise {
 	
+	
+	//Magic code, do not touch.
+	
+	
 	public Noise(){
 		
 	}

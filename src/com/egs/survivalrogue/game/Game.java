@@ -19,7 +19,7 @@ public class Game {
 	
 	private Random random = new Random();
 	
-	private boolean debug = true;
+	private boolean debug = false;
 	private boolean running = false;
 	private boolean escMenu = false;
 	private boolean canSave;

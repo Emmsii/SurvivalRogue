@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.egs.survivalrogue.game.level.objects.Obj;
 import com.egs.survivalrogue.game.world.Chunk;
 import com.egs.survivalrogue.util.FileHandler;
 import com.egs.survivalrogue.util.InputHandler;
@@ -19,7 +20,6 @@ public class Level {
 	private Chunk chunk;
 	private Noise noise;
 
-
 	private String name;
 	private long seed;
 
@@ -29,6 +29,7 @@ public class Level {
 	private int chunksLoaded = 0;
 	
 	private boolean moving;
+	private double angle = 0.1;
 	
 	private double loadTime = 0;
 	private double saveTime = 0;
@@ -56,7 +57,16 @@ public class Level {
 		this.noise = new Noise();
 		loadLevel(worldName);
 	}
-	
+
+	public void init(){
+		file.newWorldFolder(name); //Save the world folder.
+		file.newWorldData(name, seed, xPos, yPos); //Create and save the world data.dat file.
+
+		loadChunks(); //Creates, saves and loads spawn chunks.
+		moving = false;
+		System.out.println("New world: " + name + " (Seed: " + seed + ")");
+	}
+		
 	public void loadLevel(String name){
 		String data[] = file.getWorldData(name);
 		String[] rawString = data[1].split(": ");
@@ -70,17 +80,9 @@ public class Level {
 		System.out.println("Level loaded.");
 	}
 
-	public void init(){
-		file.newWorldFolder(name); //Save the world folder.
-		file.newWorldData(name, seed, xPos, yPos); //Create and save the world data.dat file.
-
-		loadChunks(); //Creates, saves and loads spawn chunks.
-		moving = false;
-		System.out.println("New world: " + name + " (Seed: " + seed + ")");
-	}
-
 	public void render(Graphics g){
 		renderChunks(g); //Renders the chunks loaded.
+		renderObjects(g);
 		if(debug) renderDebug(g); //Renders the debug information, on by default.
 	}
 
@@ -117,13 +119,6 @@ public class Level {
 	}
 
 	public void renderTile(String icon, Color first, Color second, int x, int y, Graphics g){
-//		g.setColor(color);
-//		g.setFont(new Font("Arial", Font.BOLD, 12));
-//
-//		if(id == 0) g.drawString("X", x, y);
-//		else if(id == 1) g.drawString("W", x, y);
-//		else if(id == 2) g.drawString("0", x, y);
-//		else if(id == 3) g.drawString("8", x, y);
 		g.setColor(first);
 		g.fillRect(x - 1, y - 11, 13, 13);
 		
@@ -188,12 +183,11 @@ public class Level {
 		double start = System.nanoTime();
 		for(int y = (yPos - 16); y < (yPos + renderDistance); y++){
 			for(int x = (xPos - 16); x < (xPos + renderDistance); x++){
-				if(x % 16 == 0 && y % 16 == 0){
+				if(x % 16 == 0 && y % 16 == 0){ //Special line, does magic, no touch.
 					int xa = x / 16;
 					int ya = y / 16;
 					if(!checkListFor(xa, ya)){
 						if(!file.checkFileFor(xa, ya, name)) createChunk(xa + "_" + ya, x, y);
-						System.out.println("X: " + x + ", Y: " + y);
 						chunks.add(file.loadChunk(xa, ya, name));
 						chunksLoaded++;
 					}
@@ -226,11 +220,9 @@ public class Level {
 	public void createChunk(String id, int x, int y){
 		double start = System.nanoTime();
 		
-		
 		chunk = new Chunk(id, x / 16, y / 16);
 
 		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
-		//int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.5, 0.4, 8, 16);
 
 		chunk.setHeight(noisemap);
 
@@ -241,7 +233,6 @@ public class Level {
 		 * 3: Moutain
 		 * 4: Sand
 		 */
-		
 		for(int ya = 0; ya < 16; ya++){
 			for(int xa = 0; xa < 16; xa++){
 				if(noisemap[xa][ya] < 64) chunk.setTileId(xa, ya, 1);
@@ -249,8 +240,13 @@ public class Level {
 				if(noisemap[xa][ya] >= 72) chunk.setTileId(xa, ya, 2);
 				if(noisemap[xa][ya] >= 250) chunk.setTileId(xa, ya, 3);
 				//else chunk.setTileId(xa, ya, 0);
+				
 			}
 		}
+		
+		chunk.addObject(new Obj(2, 2, 1));
+		
+		
 		double start2 = System.nanoTime();
 		file.saveChunk(chunk, name);
 		saveTime = (System.nanoTime() - start2) / 1000000;
@@ -263,10 +259,33 @@ public class Level {
 	 * Chunks End -------------------------------------------------------------
 	 */
 	
+	public void renderObjects(Graphics g){
+		for(Chunk chunk : chunks){
+			for(Obj obj : chunk.getObjects()){
+				int x = ((obj.getX() + (chunk.getX() * 16) - xPos) * 12);
+				int y = ((obj.getY() + (chunk.getY() * 16) - yPos) * 12) + 10;
+				
+				if(obj.getX() + (chunk.getX() * 16) - xPos > 43) continue;
+				if(obj.getX() + (chunk.getX() * 16) - xPos < 0) continue;
+				if(obj.getY() + (chunk.getY() * 16) - yPos > 33) continue;
+				if(obj.getY() + (chunk.getY() * 16) - yPos < 0) continue;
+				    
+				int type = obj.getType();
+				renderObjTile(x, y, type, obj, chunk, g);
+			}
+		}
+	}
+	
+	public void renderObjTile(int x, int y, int type, Obj obj, Chunk chunk, Graphics g){
+		g.setFont(new Font("Arial", Font.BOLD, 12));
+		if(type == 1){
+			g.setColor(Color.GREEN);
+			g.drawString("T", x, y);
+		}
+	}
+	
 	public void saveLevel(){
-		System.out.println("Saving level.");
 		file.updateWorldData(name, seed, xPos, yPos);
-		//Update level.dat file with relevant data.
 	}
 
 	private boolean checkListFor(int x, int y){

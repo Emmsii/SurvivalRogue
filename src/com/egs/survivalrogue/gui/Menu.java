@@ -14,7 +14,6 @@ public class Menu {
 	private MainMenu mainMenu;
 	private SecretMenu secretMenu;
 	private MiscMenu miscMenu;
-	private CreateWorldMenu createWorldMenu;
 	private CreatePlayerMenu createPlayerMenu;
 	private LoadGameMenu loadGameMenu;
 	
@@ -24,7 +23,6 @@ public class Menu {
 		mainMenu = new MainMenu(input, this);
 		secretMenu = new SecretMenu(input, this);
 		miscMenu = new MiscMenu(input, this);
-		createWorldMenu = new CreateWorldMenu(main, input, this, file);
 		createPlayerMenu = new CreatePlayerMenu(input, this, game, main, file);
 		loadGameMenu = new LoadGameMenu(main, game, input, this, file);
 	}
@@ -37,7 +35,6 @@ public class Menu {
 		if(state == 2) miscMenu.render(g); //Render the misc menu.
 		if(state == 3) createPlayerMenu.render(g); //Render the player creation menu.
 		if(state == 4) loadGameMenu.render(g); //Render the load game menu.
-		if(state == 5) createWorldMenu.render(g); //Render the world creation menu.
 	}
 	
 	public void update(){
@@ -46,7 +43,6 @@ public class Menu {
 		if(state == 2) miscMenu.update(); //Update the misc menu.
 		if(state == 3) createPlayerMenu.update(); //Update the player creation menu.
 		if(state == 4) loadGameMenu.update(); //Update the load game menu.
-		if(state == 5) createWorldMenu.update(); //Update the world creation menu.
 	}
 
 	public void drawText(String msg, int x, int y, int size, boolean bold, Graphics g){

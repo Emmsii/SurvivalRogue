@@ -1,6 +1,11 @@
 package com.egs.survivalrogue.game.world;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import com.egs.survivalrogue.game.level.objects.Obj;
 
 public class Chunk implements Serializable{
 
@@ -11,6 +16,8 @@ public class Chunk implements Serializable{
 	protected int y;
 	protected int[][] height;
 	protected int[][] tileId;
+	
+	protected List<Obj> objects = new ArrayList<Obj>();
 
 	public Chunk(String id, int x, int y){
 		this.id = id;
@@ -70,5 +77,20 @@ public class Chunk implements Serializable{
 	
 	public int getTileId(int x, int y){
 		return this.tileId[x][y];
+	}
+	
+	public void addObject(Obj object){
+		objects.add(object);
+	}
+	
+	public void removeObject(Obj object){
+		for(ListIterator<Obj> i = objects.listIterator(); i.hasNext();){
+			Obj obj = i.next();
+			if(object.equals(obj)) i.remove();
+		}
+	}
+
+	public List<Obj> getObjects() {
+		return objects;
 	}
 }

@@ -3,9 +3,9 @@ package com.egs.survivalrogue;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -39,6 +39,14 @@ public class MainComponent extends Canvas implements Runnable{
 		file = new FileHandler();
 		game = new Game(input, this, file);
 		menu = new Menu(input, game, this, file);
+		
+		//TODO: RANDOM NUMBERS BASED OFF A SEED, FOR FUTURE REFERANCE.
+		
+		long s = 123494685L;
+		Random random = new Random(s);
+		for(int i = 0; i < 10; i++){
+			System.out.println("Random: " + random.nextInt());
+		}
 
 	}
 	
@@ -134,7 +142,6 @@ public class MainComponent extends Canvas implements Runnable{
 
 	public void init(){
 		//Reset game menus.
-		
 		setState(0);
 		menu = null;
 		menu = new Menu(input, game, this, file);
