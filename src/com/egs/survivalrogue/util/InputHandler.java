@@ -50,6 +50,9 @@ public class InputHandler implements KeyListener{
 	public Key debug = new Key();
 	public Key reload = new Key();
 	
+	public Key tempView = new Key();
+	public Key rainView = new Key();
+	
 	public void release(){
 		for(int i = 0; i < keys.size(); i++){
 			keys.get(i).pressed = false;
@@ -78,6 +81,8 @@ public class InputHandler implements KeyListener{
 		if(keyCode == KeyEvent.VK_ESCAPE) esc.toggle(isPressed);
 		
 		if(keyCode == KeyEvent.VK_F3) debug.toggle(isPressed);
-		if(keyCode == KeyEvent.VK_F5) reload.toggle(isPressed);
+		if(keyCode == KeyEvent.VK_F4) tempView.toggle(isPressed);
+		if(keyCode == KeyEvent.VK_F5) rainView.toggle(isPressed);
+		if(keyCode == KeyEvent.VK_F) reload.toggle(isPressed);
 	}
 }

@@ -35,7 +35,7 @@ public class FileHandler {
 		if(!file.exists()) file.mkdirs();
 	}
 	
-	public void newWorldData(String name, long seed, int x, int y){
+	public void newWorldData(String name, long seed, int x, int y, int obj){
 		file = new File(location + "/worlds/" + name + "/level.dat");
 		if(!file.exists())
 			try {
@@ -45,6 +45,7 @@ public class FileHandler {
 				write.println("seed: " + seed);
 				write.println("x: " + x);
 				write.println("y: " + y);
+				write.println("obj: " + obj);
 				write.close();
 			} catch (IOException e){
 				System.err.println("Error: Could not make level data file.");
@@ -52,7 +53,7 @@ public class FileHandler {
 			}
 	}
 	
-	public void updateWorldData(String name, long seed, int x, int y){
+	public void updateWorldData(String name, long seed, int x, int y, int obj){
 		file = new File(location + "/worlds/" + name + "/level.dat");
 		if(file.exists()){
 			try{
@@ -64,6 +65,7 @@ public class FileHandler {
 					write.println("seed: " + seed);
 					write.println("x: " + x);
 					write.println("y: " + y);
+					write.println("obj: " + obj);
 					write.close();
 				}else System.err.println("Error: level.dat file id invalid for world: " + name);
 				in.close();

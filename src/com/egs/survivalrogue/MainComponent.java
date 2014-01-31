@@ -45,7 +45,7 @@ public class MainComponent extends Canvas implements Runnable{
 		long s = 123494685L;
 		Random random = new Random(s);
 		for(int i = 0; i < 10; i++){
-			System.out.println("Random: " + random.nextInt());
+			//System.out.println("Random: " + random.nextInt());
 		}
 
 	}
