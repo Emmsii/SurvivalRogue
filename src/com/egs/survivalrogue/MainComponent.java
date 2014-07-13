@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
@@ -41,6 +43,8 @@ public class MainComponent extends Canvas implements Runnable{
 		menu = new Menu(input, game, this, file);
 		
 		//TODO: RANDOM NUMBERS BASED OFF A SEED, FOR FUTURE REFERANCE.
+		
+		//TODO: Test change for git.
 		
 		long s = 123494685L;
 		Random random = new Random(s);
@@ -122,6 +126,7 @@ public class MainComponent extends Canvas implements Runnable{
 		}
 		
 		Graphics g = bs.getDrawGraphics();
+		//this.antiAliasing(g);
 		g.setColor(new Color(50, 50, 50));
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -147,6 +152,13 @@ public class MainComponent extends Canvas implements Runnable{
 		menu = new Menu(input, game, this, file);
 	}
 	
+	public void antiAliasing(Graphics g){
+		Graphics2D g2d = (Graphics2D) g;
+		RenderingHints rh = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHints(rh);
+	}
+		
 	public int getState() {
 		return state;
 	}
