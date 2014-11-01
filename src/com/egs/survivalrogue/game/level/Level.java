@@ -126,6 +126,9 @@ public class Level {
 			xPos++;
 			moving = true;
 		}
+		
+		xPos++;
+		moving = true;
 
 		if(input.debug.isPressed()){
 			if(!debug) debug = true;
@@ -289,10 +292,10 @@ public class Level {
 	public void createChunk(String id, int x, int y){
 		double start = System.nanoTime();
 		
-		chunk = new Chunk(id, x / 16, y / 16);
+		chunk = new Chunk(id, Math.abs(x / 16), Math.abs(y / 16));
 
-		//int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
-		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.08, 0.4, 8, 16);		
+		int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.008, 0.4, 8, 16);
+		//int[][] noisemap = noise.startNoise(16, 16, x, y, seed, 0.08, 0.4, 8, 16);		
 		
 		chunk.setHeight(noisemap);
 
@@ -305,7 +308,7 @@ public class Level {
 		int waterRange = (70 - 0);
 		int mountRange = (255 - 81);
 		double newRange = (1.0 - 0.0);
-		
+
 		for(int ya = 0; ya < 16; ya++){
 			for(int xa = 0; xa < 16; xa++){
 				chunk.setTemp(xa, ya, 0.0);

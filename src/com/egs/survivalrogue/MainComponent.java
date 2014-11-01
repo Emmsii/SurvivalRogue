@@ -42,6 +42,8 @@ public class MainComponent extends Canvas implements Runnable{
 		game = new Game(input, this, file);
 		menu = new Menu(input, game, this, file);
 		
+		//A change
+		
 		//TODO: RANDOM NUMBERS BASED OFF A SEED, FOR FUTURE REFERANCE.
 		
 		//TODO: Test change for git.
